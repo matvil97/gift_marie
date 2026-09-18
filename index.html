@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marie, 27 ans</title>
+<meta name="description" content="Pour Marie, pour ses 27 ans.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 28C16 28 3 20 3 11.5 3 6.8 6.8 3 11.3 3c2.6 0 4.9 1.3 6.3 3.3A7.8 7.8 0 0 1 20.7 3C25.2 3 29 6.8 29 11.5 29 20 16 28 16 28Z' fill='%23b5495b'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#faf5ef;
+    --ink:#3a2c2c;
+    --rose:#b5495b;
+    --rose-dim:#d8a4ac;
+    --gold:#b8934f;
+    --line:rgba(58,44,44,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Jost',sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,.serif{font-family:'Fraunces',serif}
+  .script{font-family:'Cormorant Garamond',serif;font-style:italic}
+
+  /* progress bar */
+  #progress{position:fixed;top:0;left:0;height:3px;background:var(--rose);width:0%;z-index:100;transition:width .1s linear}
+
+  section{position:relative;width:100%;padding:0 6vw}
+
+  /* ---------- HERO ---------- */
+  #hero{
+    min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;background:
+      radial-gradient(120% 80% at 50% 0%, #fff 0%, var(--cream) 55%);
+  }
+  .petals{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .petal{position:absolute;top:-5vh;font-size:18px;opacity:.55;animation:fall linear infinite;color:var(--rose-dim)}
+  @keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+
+  .kicker{font-family:'Jost',sans-serif;letter-spacing:4px;text-transform:uppercase;font-size:12px;color:var(--gold);z-index:1;margin-bottom:22px}
+  #hero h1{font-size:clamp(48px,13vw,110px);font-weight:600;color:var(--ink);line-height:1;z-index:1}
+  #hero .sub{font-size:clamp(17px,3vw,22px);color:var(--ink);opacity:.75;max-width:520px;margin-top:22px;z-index:1;font-family:'Cormorant Garamond',serif;font-style:italic}
+  .scrollcue{margin-top:8vh;z-index:1;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--ink);opacity:.5;display:flex;flex-direction:column;align-items:center;gap:8px}
+  .scrollcue .bar{width:1px;height:36px;background:var(--ink);opacity:.4;animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{transform:scaleY(1);opacity:.15}50%{transform:scaleY(1)translateY(6px);opacity:.5}}
+
+  /* ---------- CHAPTERS ---------- */
+  .chapter{max-width:1100px;margin:0 auto;padding-top:14vh;padding-bottom:14vh}
+  .chapter-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--rose);letter-spacing:2px;margin-bottom:10px}
+  .chapter-title{font-size:clamp(28px,5vw,44px);font-weight:600;margin-bottom:34px;max-width:640px}
+  .chapter-grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:center}
+  @media(min-width:820px){
+    .chapter-grid{grid-template-columns:1fr 1fr;gap:70px}
+    .chapter.flip .chapter-grid{direction:rtl}
+    .chapter.flip .chapter-grid > *{direction:ltr}
+  }
+  .frame{position:relative}
+  .frame img{width:100%;display:block;border-radius:4px;box-shadow:0 30px 60px -25px rgba(58,44,44,.35)}
+  .frame.a img{transform:rotate(-1.2deg)}
+  .frame.b img{transform:rotate(1deg)}
+  .frame-tag{position:absolute;bottom:-14px;right:18px;background:var(--cream);border:1px solid var(--line);
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;padding:4px 14px;border-radius:20px;color:var(--rose)}
+  .text-col p{font-size:clamp(16px,2vw,19px);line-height:1.75;color:var(--ink);opacity:.9;max-width:480px}
+  .text-col p + p{margin-top:18px}
+
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .duo .frame img{border-radius:4px}
+
+  /* ---------- GALLERY (chapter 4) ---------- */
+  .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:10px}
+  @media(min-width:640px){.gallery{grid-template-columns:repeat(3,1fr)}}
+  .gallery .frame img{border-radius:4px;transform:none}
+  .gallery .frame:nth-child(2n) img{margin-top:26px}
+
+  /* ---------- reveal on scroll ---------- */
+  .reveal{opacity:0;transform:translateY(36px);transition:opacity 1s cubic-bezier(.22,.61,.36,1),transform 1s cubic-bezier(.22,.61,.36,1)}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+  .reveal.d1{transition-delay:.12s}
+  .reveal.d2{transition-delay:.24s}
+
+  hr.sep{border:none;height:1px;background:var(--line);max-width:1100px;margin:0 auto}
+
+  /* ---------- FINAL ---------- */
+  #final{
+    min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;background:linear-gradient(180deg,var(--cream) 0%,#f6e9e6 100%);padding-top:14vh;padding-bottom:12vh;
+  }
+  .age-reveal{position:relative;font-family:'Fraunces',serif;font-weight:600;font-size:clamp(120px,32vw,320px);
+    color:var(--rose);line-height:.8;letter-spacing:-4px}
+  .age-reveal sup{font-size:clamp(20px,4vw,34px);font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--ink);top:-1em}
+  #final .date{margin-top:4px;letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--gold)}
+  #final .msg{max-width:600px;margin:44px auto 0;font-size:clamp(17px,2.4vw,21px);line-height:1.85;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--ink)}
+  #final .sign{margin-top:40px;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--rose)}
+  #final .heart{margin-top:24px;font-size:20px;color:var(--rose-dim)}
+
+  footer{padding:40px 0;text-align:center;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink);opacity:.35}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<section id="hero">
+  <div class="petals" id="petals"></div>
+  <div class="kicker">19 septembre</div>
+  <h1>Marie.</h1>
+  <p class="sub">27 histoires n'auraient pas suffi. Alors j'en ai choisi quelques-unes.</p>
+  <div class="scrollcue"><span>Défile</span><span class="bar"></span></div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num reveal">Chapitre I</div>
+  <h2 class="chapter-title reveal">L'enfance, à deux.</h2>
+  <div class="chapter-grid">
+    <div class="frame a reveal">
+      <img src="photos/01-enfance.jpg" alt="Marie et son frère, enfants, à la plage">
+      <div class="frame-tag">nous, petits</div>
+    </div>
+    <div class="text-col reveal d1">
+      <p>Sur cette photo, on n'a presque pas grandi. Toi la première, moi juste derrière — comme toujours.</p>
+      <p>Aussi loin que je me souvienne, tu étais déjà celle qui veillait : sur mes bêtises, mes chagrins, mes bras trop courts pour atteindre les choses. On dit que les grandes sœurs protègent. Toi, tu as toujours fait bien plus que ça.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="chapter flip">
+  <div class="chapter-num reveal">Chapitre II</div>
+  <h2 class="chapter-title reveal">On a grandi, sans jamais s'éloigner.</h2>
+  <div class="chapter-grid">
+    <div class="frame b reveal">
+      <img src="photos/03-ado-calin.jpg" alt="Marie et son frère, adolescents, complices">
+      <div class="frame-tag">toujours collés</div>
+    </div>
+    <div class="text-col reveal d1">
+      <p>Les vacances, les fous rires débiles, les journées entières côte à côte sans se poser de questions.</p>
+      <p>Tu étais devenue grande, mais tu me gardais toujours près de toi — comme si t'occuper de moi ne t'avait jamais pesé, jamais lassée.</p>
+    </div>
+  </div>
+  <div class="duo" style="margin-top:50px;max-width:1100px;margin-left:auto;margin-right:auto">
+    <div class="frame reveal"><img src="photos/02-ado-plage.jpg" alt="Marie et son frère adolescents sur une jetée face à la plage"></div>
+    <div class="frame reveal d1" style="align-self:end"><img src="photos/04-selfie.jpg" alt="Marie et son frère, jeunes adultes, en soirée"></div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="chapter">
+  <div class="chapter-num reveal">Chapitre III</div>
+  <h2 class="chapter-title reveal">Une grande sœur, officiellement.<br>Une seconde maman, en vrai.</h2>
+  <div class="chapter-grid">
+    <div class="frame a reveal">
+      <img src="photos/05-anniv-23.jpg" alt="Marie fêtant ses 23 ans">
+      <div class="frame-tag">tes 23 ans</div>
+    </div>
+    <div class="text-col reveal d1">
+      <p>Les années ont passé et rien n'a changé. Tu as toujours été la première à répondre, à arriver, à réparer ce qui n'allait pas.</p>
+      <p>Je n'ai jamais eu besoin de demander de l'aide bien longtemps — tu étais déjà là, avant même que je finisse ma phrase.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="chapter flip">
+  <div class="chapter-num reveal">Chapitre IV</div>
+  <h2 class="chapter-title reveal">Toi, aujourd'hui.</h2>
+  <div class="chapter-grid">
+    <div class="frame b reveal">
+      <img src="photos/06-bebe.jpg" alt="Marie tenant un bébé dans ses bras, souriante">
+      <div class="frame-tag">tu materne encore</div>
+    </div>
+    <div class="text-col reveal d1">
+      <p>Aujourd'hui, je te regarde vivre ta vie : voyager, rayonner, prendre soin des autres comme tu l'as toujours fait — même d'un bébé qui n'est pas le tien.</p>
+      <p>Et je me dis que la personne qui a passé sa vie à prendre soin de tout le monde mérite, elle aussi, qu'on prenne soin d'elle.</p>
+    </div>
+  </div>
+  <div class="gallery reveal" style="max-width:1100px;margin-left:auto;margin-right:auto">
+    <div class="frame"><img src="photos/07-glam.jpg" alt="Marie souriante, élégante"></div>
+    <div class="frame"><img src="photos/08-voyage-falaise.jpg" alt="Marie en voyage, face à un paysage"></div>
+    <div class="frame"><img src="photos/09-voiture-fun.jpg" alt="Marie qui fait la grimace en voiture, complice"></div>
+    <div class="frame"><img src="photos/10-voiture-regard.jpg" alt="Marie qui se retourne, dans une voiture"></div>
+    <div class="frame" style="grid-column:span 2"><img src="photos/11-voiture-sommeil.jpg" alt="Marie qui somnole dans la voiture, lumière du soir"></div>
+  </div>
+</section>
+
+<section id="final">
+  <div class="age-reveal reveal"><sup>elle a</sup>27<sup>ans</sup></div>
+  <div class="date reveal d1">19 · 09 · 2026</div>
+  <p class="msg reveal d2">Alors aujourd'hui, jour de tes 27 ans, j'avais juste envie de te le dire autrement que par un message WhatsApp : merci d'avoir toujours été là. Merci d'avoir été une grande sœur, une confidente, et parfois une seconde maman, sans jamais rien demander en retour.<br><br>Joyeuse anniversaire, Marie. Je t'aime.</p>
+  <div class="sign reveal d2">— Ton petit frère, Matthieu</div>
+  <div class="heart reveal d2">♥</div>
+</section>
+
+<footer>fait avec amour, pour toi</footer>
+
+<script>
+  // scroll progress
+  const bar = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = pct + '%';
+  });
+
+  // reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // falling petals in hero
+  const petalWrap = document.getElementById('petals');
+  const glyphs = ['✿','❀','·'];
+  for (let i = 0; i < 16; i++) {
+    const p = document.createElement('span');
+    p.className = 'petal';
+    p.textContent = glyphs[Math.floor(Math.random()*glyphs.length)];
+    p.style.left = Math.random()*100 + '%';
+    p.style.fontSize = (10 + Math.random()*14) + 'px';
+    p.style.animationDuration = (10 + Math.random()*10) + 's';
+    p.style.animationDelay = (Math.random()*10) + 's';
+    petalWrap.appendChild(p);
+  }
+</script>
+</body>
+</html>
