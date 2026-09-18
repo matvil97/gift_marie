@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Marie, 27 ans</title>
 <meta name="description" content="Pour Marie, pour ses 27 ans.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 28C16 28 3 20 3 11.5 3 6.8 6.8 3 11.3 3c2.6 0 4.9 1.3 6.3 3.3A7.8 7.8 0 0 1 20.7 3C25.2 3 29 6.8 29 11.5 29 20 16 28 16 28Z' fill='%23b5495b'/%3E%3C/svg%3E">
@@ -15,209 +15,304 @@
     --ink:#3a2c2c;
     --rose:#b5495b;
     --rose-dim:#d8a4ac;
-    --gold:#b8934f;
-    --line:rgba(58,44,44,.12);
+    --gold:#c9ad7a;
+    --line:rgba(255,255,255,.25);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
+  html,body{height:100%;overscroll-behavior:none}
   body{
-    background:var(--cream);
+    background:#000;
     color:var(--ink);
     font-family:'Jost',sans-serif;
     font-weight:300;
-    overflow-x:hidden;
+    overflow:hidden;
     -webkit-font-smoothing:antialiased;
   }
   h1,h2,.serif{font-family:'Fraunces',serif}
-  .script{font-family:'Cormorant Garamond',serif;font-style:italic}
 
-  /* progress bar */
-  #progress{position:fixed;top:0;left:0;height:3px;background:var(--rose);width:0%;z-index:100;transition:width .1s linear}
+  #stage{position:fixed;inset:0;width:100%;height:100svh}
 
-  section{position:relative;width:100%;padding:0 6vw}
+  #progress-track{position:fixed;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.18);z-index:100}
+  #progress{height:100%;background:var(--gold);width:0%;transition:width .15s linear}
 
-  /* ---------- HERO ---------- */
-  #hero{
-    min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    text-align:center;background:
-      radial-gradient(120% 80% at 50% 0%, #fff 0%, var(--cream) 55%);
+  .scene{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity 1.1s ease}
+  .scene.active{opacity:1;pointer-events:auto}
+
+  /* ---------- HERO / start ---------- */
+  #s-hero{
+    background:radial-gradient(120% 90% at 50% 20%, #fffaf5 0%, var(--cream) 60%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    color:var(--ink);padding:0 8vw;
   }
   .petals{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-  .petal{position:absolute;top:-5vh;font-size:18px;opacity:.55;animation:fall linear infinite;color:var(--rose-dim)}
-  @keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
-
-  .kicker{font-family:'Jost',sans-serif;letter-spacing:4px;text-transform:uppercase;font-size:12px;color:var(--gold);z-index:1;margin-bottom:22px}
-  #hero h1{font-size:clamp(48px,13vw,110px);font-weight:600;color:var(--ink);line-height:1;z-index:1}
-  #hero .sub{font-size:clamp(17px,3vw,22px);color:var(--ink);opacity:.75;max-width:520px;margin-top:22px;z-index:1;font-family:'Cormorant Garamond',serif;font-style:italic}
-  .scrollcue{margin-top:8vh;z-index:1;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--ink);opacity:.5;display:flex;flex-direction:column;align-items:center;gap:8px}
-  .scrollcue .bar{width:1px;height:36px;background:var(--ink);opacity:.4;animation:pulse 1.8s ease-in-out infinite}
-  @keyframes pulse{0%,100%{transform:scaleY(1);opacity:.15}50%{transform:scaleY(1)translateY(6px);opacity:.5}}
-
-  /* ---------- CHAPTERS ---------- */
-  .chapter{max-width:1100px;margin:0 auto;padding-top:14vh;padding-bottom:14vh}
-  .chapter-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--rose);letter-spacing:2px;margin-bottom:10px}
-  .chapter-title{font-size:clamp(28px,5vw,44px);font-weight:600;margin-bottom:34px;max-width:640px}
-  .chapter-grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:center}
-  @media(min-width:820px){
-    .chapter-grid{grid-template-columns:1fr 1fr;gap:70px}
-    .chapter.flip .chapter-grid{direction:rtl}
-    .chapter.flip .chapter-grid > *{direction:ltr}
+  .petal{position:absolute;top:-5vh;opacity:.55;animation:fall linear infinite;color:var(--rose-dim)}
+  @keyframes fall{to{transform:translateY(115vh) rotate(360deg)}}
+  .kicker{letter-spacing:4px;text-transform:uppercase;font-size:12px;color:#b8934f;z-index:1;margin-bottom:20px}
+  #s-hero h1{font-size:clamp(52px,15vw,110px);font-weight:600;line-height:1;z-index:1}
+  #s-hero .sub{font-size:clamp(16px,3vw,20px);opacity:.75;max-width:420px;margin-top:18px;z-index:1;font-family:'Cormorant Garamond',serif;font-style:italic}
+  #start-btn{
+    z-index:1;margin-top:8vh;background:var(--rose);color:#fff;border:none;padding:16px 38px;
+    border-radius:40px;font-family:'Jost',sans-serif;letter-spacing:2px;text-transform:uppercase;font-size:13px;
+    cursor:pointer;box-shadow:0 14px 30px -10px rgba(181,73,91,.55);transition:transform .2s ease;
   }
-  .frame{position:relative}
-  .frame img{width:100%;display:block;border-radius:4px;box-shadow:0 30px 60px -25px rgba(58,44,44,.35)}
-  .frame.a img{transform:rotate(-1.2deg)}
-  .frame.b img{transform:rotate(1deg)}
-  .frame-tag{position:absolute;bottom:-14px;right:18px;background:var(--cream);border:1px solid var(--line);
-    font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;padding:4px 14px;border-radius:20px;color:var(--rose)}
-  .text-col p{font-size:clamp(16px,2vw,19px);line-height:1.75;color:var(--ink);opacity:.9;max-width:480px}
-  .text-col p + p{margin-top:18px}
+  #start-btn:active{transform:scale(.96)}
+  #start-btn .heart{margin-left:8px}
+  #s-hero .hint{z-index:1;margin-top:16px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;opacity:.4}
 
-  .duo{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-  .duo .frame img{border-radius:4px}
-
-  /* ---------- GALLERY (chapter 4) ---------- */
-  .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:10px}
-  @media(min-width:640px){.gallery{grid-template-columns:repeat(3,1fr)}}
-  .gallery .frame img{border-radius:4px;transform:none}
-  .gallery .frame:nth-child(2n) img{margin-top:26px}
-
-  /* ---------- reveal on scroll ---------- */
-  .reveal{opacity:0;transform:translateY(36px);transition:opacity 1s cubic-bezier(.22,.61,.36,1),transform 1s cubic-bezier(.22,.61,.36,1)}
-  .reveal.visible{opacity:1;transform:translateY(0)}
-  .reveal.d1{transition-delay:.12s}
-  .reveal.d2{transition-delay:.24s}
-
-  hr.sep{border:none;height:1px;background:var(--line);max-width:1100px;margin:0 auto}
+  /* ---------- STORY SCENES ---------- */
+  .story{background:#000}
+  .story .imgwrap{position:absolute;inset:0;overflow:hidden;background:#000}
+  .story .imgwrap .frame{position:absolute;inset:0;opacity:0;transition:opacity 1.4s ease}
+  .story .imgwrap .frame.active{opacity:1}
+  .story .imgwrap .frame img{position:absolute;inset:0;width:100%;height:100%}
+  .story .imgwrap .frame img.bg{object-fit:cover;filter:blur(38px) brightness(.55) saturate(1.15);transform:scale(1.25)}
+  .story .imgwrap .frame img.fg{object-fit:contain;transition:transform 8s ease;transform:scale(1.04)}
+  .story .imgwrap .frame.active img.fg{transform:scale(1)}
+  .story .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,.15) 55%,rgba(0,0,0,.82) 100%)}
+  .story .content{position:absolute;left:0;right:0;bottom:0;padding:0 7vw 9vh;color:#fdf9f4;z-index:2}
+  .story .chapter-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--gold);letter-spacing:2px;margin-bottom:10px}
+  .story .chapter-title{font-size:clamp(24px,6vw,40px);font-weight:600;margin-bottom:16px;max-width:640px}
+  .story p{font-size:clamp(14.5px,2.6vw,18px);line-height:1.7;max-width:440px;opacity:.94}
+  .story p + p{margin-top:12px}
+  .dots{position:absolute;top:18px;left:0;right:0;display:flex;gap:5px;padding:0 4vw;z-index:3}
+  .dots span{flex:1;height:2px;background:rgba(255,255,255,.3);border-radius:2px;overflow:hidden}
+  .dots span i{display:block;height:100%;width:0%;background:#fff}
+  .dots span.done i{width:100%}
 
   /* ---------- FINAL ---------- */
-  #final{
-    min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    text-align:center;background:linear-gradient(180deg,var(--cream) 0%,#f6e9e6 100%);padding-top:14vh;padding-bottom:12vh;
+  #s-final{
+    background:linear-gradient(180deg,#fbf1ea 0%,#f6e3de 100%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    padding:0 8vw;color:var(--ink);
   }
-  .age-reveal{position:relative;font-family:'Fraunces',serif;font-weight:600;font-size:clamp(120px,32vw,320px);
-    color:var(--rose);line-height:.8;letter-spacing:-4px}
-  .age-reveal sup{font-size:clamp(20px,4vw,34px);font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--ink);top:-1em}
-  #final .date{margin-top:4px;letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--gold)}
-  #final .msg{max-width:600px;margin:44px auto 0;font-size:clamp(17px,2.4vw,21px);line-height:1.85;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--ink)}
-  #final .sign{margin-top:40px;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--rose)}
-  #final .heart{margin-top:24px;font-size:20px;color:var(--rose-dim)}
+  .age-reveal{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(96px,26vw,220px);color:var(--rose);line-height:.8;letter-spacing:-3px}
+  .age-reveal sup{font-size:clamp(16px,3.4vw,26px);font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--ink);opacity:.8}
+  #s-final .date{margin-top:6px;letter-spacing:3px;text-transform:uppercase;font-size:11px;color:#b8934f}
+  #s-final .msg{max-width:520px;margin:5vh auto 0;font-size:clamp(15px,2.6vw,19px);line-height:1.85;font-family:'Cormorant Garamond',serif;font-style:italic}
+  #s-final .sign{margin-top:5vh;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--rose)}
+  #s-final .heart{margin-top:16px;font-size:18px;color:var(--rose-dim)}
+  #replay-btn{
+    margin-top:5vh;background:none;border:1px solid rgba(58,44,44,.3);color:var(--ink);padding:10px 26px;
+    border-radius:30px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;
+    opacity:0;pointer-events:none;transition:opacity .8s ease;
+  }
+  #replay-btn.show{opacity:.7;pointer-events:auto}
 
-  footer{padding:40px 0;text-align:center;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink);opacity:.35}
+  /* ---------- controls ---------- */
+  #mute-btn{
+    position:fixed;bottom:22px;right:20px;z-index:50;width:42px;height:42px;border-radius:50%;
+    background:rgba(0,0,0,.35);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .5s ease;
+  }
+  #mute-btn.show{opacity:1;pointer-events:auto}
+  #mute-btn svg{width:18px;height:18px;stroke:#fff;fill:none}
+
+  @media(min-width:820px){
+    .story .content{padding-left:9vw;padding-bottom:11vh}
+  }
 </style>
 </head>
 <body>
 
-<div id="progress"></div>
+<div id="progress-track"><div id="progress"></div></div>
+<audio id="bgm" src="audio/musique.mp3" preload="auto"></audio>
 
-<section id="hero">
-  <div class="petals" id="petals"></div>
-  <div class="kicker">19 septembre</div>
-  <h1>Marie.</h1>
-  <p class="sub">27 histoires n'auraient pas suffi. Alors j'en ai choisi quelques-unes.</p>
-  <div class="scrollcue"><span>Défile</span><span class="bar"></span></div>
-</section>
+<div id="stage">
 
-<section class="chapter">
-  <div class="chapter-num reveal">Chapitre I</div>
-  <h2 class="chapter-title reveal">L'enfance, à deux.</h2>
-  <div class="chapter-grid">
-    <div class="frame a reveal">
-      <img src="photos/01-enfance.jpg" alt="Marie et son frère, enfants, à la plage">
-      <div class="frame-tag">nous, petits</div>
-    </div>
-    <div class="text-col reveal d1">
+  <section class="scene active" id="s-hero">
+    <div class="petals" id="petals"></div>
+    <div class="kicker">19 septembre</div>
+    <h1>Marie.</h1>
+    <p class="sub">27 histoires n'auraient pas suffi. Alors j'en ai choisi quelques-unes, en musique.</p>
+    <button id="start-btn">Commencer <span class="heart">♥</span></button>
+    <div class="hint">Son recommandé</div>
+  </section>
+
+  <section class="scene story" id="s1">
+    <div class="dots"></div>
+    <div class="imgwrap"><div class="frame active"><img class="bg" src="photos/01-enfance.jpg" alt=""><img class="fg" src="photos/01-enfance.jpg" alt="Marie et son frère, enfants, à la plage"></div></div>
+    <div class="scrim"></div>
+    <div class="content">
+      <div class="chapter-num">Chapitre I</div>
+      <h2 class="chapter-title">L'enfance, à deux.</h2>
       <p>Sur cette photo, on n'a presque pas grandi. Toi la première, moi juste derrière — comme toujours.</p>
-      <p>Aussi loin que je me souvienne, tu étais déjà celle qui veillait : sur mes bêtises, mes chagrins, mes bras trop courts pour atteindre les choses. On dit que les grandes sœurs protègent. Toi, tu as toujours fait bien plus que ça.</p>
+      <p>Aussi loin que je me souvienne, tu étais déjà celle qui veillait sur moi.</p>
     </div>
-  </div>
-</section>
+  </section>
 
-<hr class="sep">
-
-<section class="chapter flip">
-  <div class="chapter-num reveal">Chapitre II</div>
-  <h2 class="chapter-title reveal">On a grandi, sans jamais s'éloigner.</h2>
-  <div class="chapter-grid">
-    <div class="frame b reveal">
-      <img src="photos/03-ado-calin.jpg" alt="Marie et son frère, adolescents, complices">
-      <div class="frame-tag">toujours collés</div>
+  <section class="scene story" id="s2">
+    <div class="dots"></div>
+    <div class="imgwrap">
+      <div class="frame active"><img class="bg" src="photos/03-ado-calin.jpg" alt=""><img class="fg" src="photos/03-ado-calin.jpg" alt="Marie et son frère, adolescents, complices"></div>
+      <div class="frame"><img class="bg" src="photos/02-ado-plage.jpg" alt=""><img class="fg" src="photos/02-ado-plage.jpg" alt="Marie et son frère adolescents sur une jetée face à la plage"></div>
+      <div class="frame"><img class="bg" src="photos/04-selfie.jpg" alt=""><img class="fg" src="photos/04-selfie.jpg" alt="Marie et son frère, jeunes adultes, en soirée"></div>
     </div>
-    <div class="text-col reveal d1">
+    <div class="scrim"></div>
+    <div class="content">
+      <div class="chapter-num">Chapitre II</div>
+      <h2 class="chapter-title">On a grandi, sans jamais s'éloigner.</h2>
       <p>Les vacances, les fous rires débiles, les journées entières côte à côte sans se poser de questions.</p>
-      <p>Tu étais devenue grande, mais tu me gardais toujours près de toi — comme si t'occuper de moi ne t'avait jamais pesé, jamais lassée.</p>
+      <p>Tu me gardais toujours près de toi, comme si t'occuper de moi ne t'avait jamais pesé.</p>
     </div>
-  </div>
-  <div class="duo" style="margin-top:50px;max-width:1100px;margin-left:auto;margin-right:auto">
-    <div class="frame reveal"><img src="photos/02-ado-plage.jpg" alt="Marie et son frère adolescents sur une jetée face à la plage"></div>
-    <div class="frame reveal d1" style="align-self:end"><img src="photos/04-selfie.jpg" alt="Marie et son frère, jeunes adultes, en soirée"></div>
-  </div>
-</section>
+  </section>
 
-<hr class="sep">
-
-<section class="chapter">
-  <div class="chapter-num reveal">Chapitre III</div>
-  <h2 class="chapter-title reveal">Une grande sœur, officiellement.<br>Une seconde maman, en vrai.</h2>
-  <div class="chapter-grid">
-    <div class="frame a reveal">
-      <img src="photos/05-anniv-23.jpg" alt="Marie fêtant ses 23 ans">
-      <div class="frame-tag">tes 23 ans</div>
+  <section class="scene story" id="s3">
+    <div class="dots"></div>
+    <div class="imgwrap"><div class="frame active"><img class="bg" src="photos/05-anniv-23.jpg" alt=""><img class="fg" src="photos/05-anniv-23.jpg" alt="Marie fêtant ses 23 ans"></div></div>
+    <div class="scrim"></div>
+    <div class="content">
+      <div class="chapter-num">Chapitre III</div>
+      <h2 class="chapter-title">Une grande sœur, officiellement.<br>Une seconde maman, en vrai.</h2>
+      <p>Tu as toujours été la première à répondre, à arriver, à réparer ce qui n'allait pas.</p>
+      <p>Je n'ai jamais eu besoin de demander bien longtemps — tu étais déjà là.</p>
     </div>
-    <div class="text-col reveal d1">
-      <p>Les années ont passé et rien n'a changé. Tu as toujours été la première à répondre, à arriver, à réparer ce qui n'allait pas.</p>
-      <p>Je n'ai jamais eu besoin de demander de l'aide bien longtemps — tu étais déjà là, avant même que je finisse ma phrase.</p>
+  </section>
+
+  <section class="scene story" id="s4">
+    <div class="dots"></div>
+    <div class="imgwrap">
+      <div class="frame active"><img class="bg" src="photos/06-bebe.jpg" alt=""><img class="fg" src="photos/06-bebe.jpg" alt="Marie tenant un bébé dans ses bras, souriante"></div>
+      <div class="frame"><img class="bg" src="photos/12-maman-fils.jpg" alt=""><img class="fg" src="photos/12-maman-fils.jpg" alt="Marie endormie contre son fils"></div>
+      <div class="frame"><img class="bg" src="photos/13-fils.jpg" alt=""><img class="fg" src="photos/13-fils.jpg" alt="Son fils, debout, devant le sapin de Noël"></div>
+      <div class="frame"><img class="bg" src="photos/07-glam.jpg" alt=""><img class="fg" src="photos/07-glam.jpg" alt="Marie souriante, élégante"></div>
+      <div class="frame"><img class="bg" src="photos/08-voyage-falaise.jpg" alt=""><img class="fg" src="photos/08-voyage-falaise.jpg" alt="Marie en voyage, face à un paysage"></div>
+      <div class="frame"><img class="bg" src="photos/09-voiture-fun.jpg" alt=""><img class="fg" src="photos/09-voiture-fun.jpg" alt="Marie qui fait la grimace en voiture, complice"></div>
+      <div class="frame"><img class="bg" src="photos/10-voiture-regard.jpg" alt=""><img class="fg" src="photos/10-voiture-regard.jpg" alt="Marie qui se retourne, dans une voiture"></div>
+      <div class="frame"><img class="bg" src="photos/11-voiture-sommeil.jpg" alt=""><img class="fg" src="photos/11-voiture-sommeil.jpg" alt="Marie qui somnole dans la voiture, lumière du soir"></div>
     </div>
-  </div>
-</section>
-
-<hr class="sep">
-
-<section class="chapter flip">
-  <div class="chapter-num reveal">Chapitre IV</div>
-  <h2 class="chapter-title reveal">Toi, aujourd'hui.</h2>
-  <div class="chapter-grid">
-    <div class="frame b reveal">
-      <img src="photos/06-bebe.jpg" alt="Marie tenant un bébé dans ses bras, souriante">
-      <div class="frame-tag">tu materne encore</div>
+    <div class="scrim"></div>
+    <div class="content">
+      <div class="chapter-num">Chapitre IV</div>
+      <h2 class="chapter-title">Toi, aujourd'hui.</h2>
+      <p>Je te regarde vivre ta vie : voyager, rayonner, et être une mère formidable.</p>
+      <p>Prendre soin des autres, tu l'as toujours fait — avec moi, petite déjà. La personne qui a passé sa vie à prendre soin de tout le monde mérite, elle aussi, qu'on prenne soin d'elle.</p>
     </div>
-    <div class="text-col reveal d1">
-      <p>Aujourd'hui, je te regarde vivre ta vie : voyager, rayonner, prendre soin des autres comme tu l'as toujours fait — même d'un bébé qui n'est pas le tien.</p>
-      <p>Et je me dis que la personne qui a passé sa vie à prendre soin de tout le monde mérite, elle aussi, qu'on prenne soin d'elle.</p>
-    </div>
-  </div>
-  <div class="gallery reveal" style="max-width:1100px;margin-left:auto;margin-right:auto">
-    <div class="frame"><img src="photos/07-glam.jpg" alt="Marie souriante, élégante"></div>
-    <div class="frame"><img src="photos/08-voyage-falaise.jpg" alt="Marie en voyage, face à un paysage"></div>
-    <div class="frame"><img src="photos/09-voiture-fun.jpg" alt="Marie qui fait la grimace en voiture, complice"></div>
-    <div class="frame"><img src="photos/10-voiture-regard.jpg" alt="Marie qui se retourne, dans une voiture"></div>
-    <div class="frame" style="grid-column:span 2"><img src="photos/11-voiture-sommeil.jpg" alt="Marie qui somnole dans la voiture, lumière du soir"></div>
-  </div>
-</section>
+  </section>
 
-<section id="final">
-  <div class="age-reveal reveal"><sup>elle a</sup>27<sup>ans</sup></div>
-  <div class="date reveal d1">19 · 09 · 2026</div>
-  <p class="msg reveal d2">Alors aujourd'hui, jour de tes 27 ans, j'avais juste envie de te le dire autrement que par un message WhatsApp : merci d'avoir toujours été là. Merci d'avoir été une grande sœur, une confidente, et parfois une seconde maman, sans jamais rien demander en retour.<br><br>Joyeuse anniversaire, Marie. Je t'aime.</p>
-  <div class="sign reveal d2">— Ton petit frère, Matthieu</div>
-  <div class="heart reveal d2">♥</div>
-</section>
+  <section class="scene" id="s-final">
+    <div class="age-reveal"><sup>elle a</sup>27<sup>ans</sup></div>
+    <div class="date">19 · 09 · 2026</div>
+    <p class="msg">Alors aujourd'hui, jour de tes 27 ans, j'avais juste envie de te le dire autrement que par un message WhatsApp : merci d'avoir toujours été là. Merci d'avoir été une grande sœur, une confidente, et parfois une seconde maman, sans jamais rien demander en retour.<br><br>Joyeuse anniversaire, Marie. Je t'aime.</p>
+    <div class="sign">— Ton petit frère, Matthieu</div>
+    <div class="heart">♥</div>
+    <button id="replay-btn">Revoir ↺</button>
+  </section>
 
-<footer>fait avec amour, pour toi</footer>
+</div>
+
+<button id="mute-btn" aria-label="Couper le son">
+  <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 9v6h4l5 5V4L8 9H4z"></path>
+    <path id="mute-wave" d="M16.5 8.5a5 5 0 0 1 0 7"></path>
+    <path id="mute-slash" d="M18 5 4 19" style="display:none"></path>
+  </svg>
+</button>
 
 <script>
-  // scroll progress
-  const bar = document.getElementById('progress');
-  window.addEventListener('scroll', () => {
-    const h = document.documentElement;
-    const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    bar.style.width = pct + '%';
+  const audio = document.getElementById('bgm');
+  const startBtn = document.getElementById('start-btn');
+  const muteBtn = document.getElementById('mute-btn');
+  const replayBtn = document.getElementById('replay-btn');
+  const progress = document.getElementById('progress');
+  const heroScene = document.getElementById('s-hero');
+  const finalScene = document.getElementById('s-final');
+
+  // timeline boundaries (seconds), tuned to the ~115s track
+  const timeline = [
+    { id: 's1', start: 0,  end: 14 },
+    { id: 's2', start: 14, end: 32, images: ['03-ado-calin','02-ado-plage','04-selfie'] },
+    { id: 's3', start: 32, end: 46 },
+    { id: 's4', start: 46, end: 86, images: ['06-bebe','12-maman-fils','13-fils','07-glam','08-voyage-falaise','09-voiture-fun','10-voiture-regard','11-voiture-sommeil'] },
+    { id: 's5', start: 86, end: Infinity }
+  ];
+  const scenes = {};
+  timeline.forEach(t => scenes[t.id] = document.getElementById(t.id));
+
+  // build progress dots per story scene
+  timeline.filter(t => t.id !== 's5').forEach(t => {
+    const wrap = scenes[t.id].querySelector('.dots');
+    const n = t.images ? t.images.length : 1;
+    for (let i = 0; i < n; i++) {
+      const d = document.createElement('span');
+      d.innerHTML = '<i></i>';
+      wrap.appendChild(d);
+    }
   });
 
-  // reveal on scroll
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.15 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  let started = false;
+  let currentSceneId = null;
+
+  function activate(id) {
+    if (id === currentSceneId) return;
+    document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+    (id === 's-final' ? finalScene : scenes[id]).classList.add('active');
+    currentSceneId = id;
+  }
+
+  function tick() {
+    if (!started) return requestAnimationFrame(tick);
+    const t = audio.currentTime;
+    const dur = audio.duration || 115;
+    progress.style.width = Math.min(100, (t / dur) * 100) + '%';
+
+    let entry = timeline[timeline.length - 1];
+    for (const e of timeline) { if (t >= e.start && t < e.end) { entry = e; break; } }
+
+    if (entry.id === 's5') {
+      activate('s-final');
+    } else {
+      activate(entry.id);
+      const scene = scenes[entry.id];
+      const dots = scene.querySelectorAll('.dots span');
+      if (entry.images) {
+        const span = entry.end - entry.start;
+        const idx = Math.min(entry.images.length - 1, Math.floor(((t - entry.start) / span) * entry.images.length));
+        const frames = scene.querySelectorAll('.imgwrap .frame');
+        frames.forEach((fr, i) => fr.classList.toggle('active', i === idx));
+        dots.forEach((d, i) => {
+          d.classList.toggle('done', i < idx);
+          const bar = d.querySelector('i');
+          if (i === idx) {
+            const segStart = entry.start + (span / entry.images.length) * i;
+            const segDur = span / entry.images.length;
+            bar.style.width = Math.min(100, ((t - segStart) / segDur) * 100) + '%';
+          } else if (i > idx) { bar.style.width = '0%'; }
+        });
+      } else {
+        dots.forEach(d => d.classList.add('done'));
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  function beginExperience() {
+    started = true;
+    heroScene.classList.remove('active');
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+    muteBtn.classList.add('show');
+    replayBtn.classList.remove('show');
+  }
+
+  startBtn.addEventListener('click', beginExperience);
+
+  muteBtn.addEventListener('click', () => {
+    audio.muted = !audio.muted;
+    document.getElementById('mute-wave').style.display = audio.muted ? 'none' : '';
+    document.getElementById('mute-slash').style.display = audio.muted ? '' : 'none';
+  });
+
+  audio.addEventListener('ended', () => {
+    activate('s-final');
+    replayBtn.classList.add('show');
+  });
+
+  replayBtn.addEventListener('click', () => {
+    replayBtn.classList.remove('show');
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  });
 
   // falling petals in hero
   const petalWrap = document.getElementById('petals');
